@@ -1,0 +1,5 @@
+2021-03-02 21:09:03 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Tabla "TEST" ya existe
+Table "TEST" already exists; SQL statement:
+CREATE TABLE TEST(ID INT PRIMARY KEY,
+   NAME VARCHAR(255)) [42101-200]

@@ -1,9 +1,11 @@
-package gal.teis.ad.ud2.sqlite.JDBC;
+package gal.teis.ad.ud2.sqlite;
 
+import gal.teis.conexion.ConexionSingleton;
 import gal.teis.excepciones.NumeroFueraRangoException;
 import gal.teis.libreriadam.ControlData;
 import gal.teis.libreriadam.Menu;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -26,9 +28,9 @@ public class Principal {
     public static void main(String[] args) {
         //Para finalizar el menú 
         boolean finalizar = false;
+        String nombreTabla;
         sc = new Scanner(System.in); //creo una instancia de la clase Scanner para la introdución de datos por teclado
-        String cadenaConexion = "jdbc:sqlite:"
-                + "D:\\IES\\6_Teis\\Modulo-Acceso a datos-DAM2\\2 AVALIACION\\UD2\\SQLite\\matriculas.db";
+        String cadenaConexion = "jdbc:sqlite:bdSQLite\\agenda.db";
 
         //Establece la conexión con una base de datos SQLite.
         //No es necesario cerrar la conexión al usar try con recursos
@@ -45,9 +47,21 @@ public class Principal {
 
                     case 2:
                         System.out.println("Introduce el nombre de la tabla de la que ver su contenido");
-                        String nombreTabla = ControlData.lerString(sc);
+                        nombreTabla = ControlData.lerString(sc);
                         verContenidoTabla(nombreTabla, laConexion);
 
+                        break;
+                    case 3:
+                        System.out.println("Introduce el nombre de la tabla de la que quieres ver sus campos");
+                        nombreTabla = ControlData.lerString(sc);
+                        System.out.println("Los campos de la tabla son");
+                        mostrarCamposTabla(nombreTabla, laConexion);
+                        break;
+                    case 4:
+                        System.out.println("Introduce el nombre de la tabla en la que quieres insertar un registro");
+                        nombreTabla = ControlData.lerString(sc);
+
+                        insertarRegistroTabla(nombreTabla, laConexion);
                         break;
                     case 9:
                         System.out.println("Hasta luego!!!");
@@ -77,7 +91,9 @@ public class Principal {
             ArrayList<String> misOpciones = new ArrayList<String>() {
                 {
                     add("Mostrar las tablas de la base de datos");
-                    add("Mostrar todos los datos de las tablas");
+                    add("Mostrar todo el contenido las tablas");
+                    add("Mostrar todos los campos de una tabla");
+                    add("Insertar nuevo registro en la tabla");
 
                     add("Finalizar");
                 }
@@ -105,6 +121,9 @@ public class Principal {
         return opcion;
     }
 
+    /**
+     * Muestra todas las tablas de la base de datos
+     */
     static void verTablas(Connection miConexion) throws SQLException {
         // Preparamos la consulta
         try (Statement elStatement = miConexion.createStatement()) {
@@ -122,6 +141,13 @@ public class Principal {
         }
     }
 
+    /**
+     * Muestra el contenido de la tabla que se pasa por parámetro
+     *
+     * @param nombreTabla
+     * @param miConexion
+     * @throws SQLException
+     */
     static void verContenidoTabla(String nombreTabla, Connection miConexion) throws SQLException {
         // Preparamos la consulta
         try (Statement elStatement = miConexion.createStatement()) {
@@ -133,10 +159,81 @@ public class Principal {
                 // Se hace un bucle mientras haya registros y se van visualizando
                 while (resul.next()) {
                     /*Para saber qué getString(i)*/
-                    System.out.printf("%s %n", resul.getString(2));
+                    for (int i = 1; i <= resul.getMetaData().getColumnCount(); i++) {
+                        System.out.printf("%s ", resul.getString(i));
+                    }
+                    System.out.println();
                 }
             }
         }
+    }
+
+    /**
+     * Muestra los campos de la tabla que se pasa por parámetro
+     *
+     * @param nombreTabla
+     * @param miConexion
+     * @throws SQLException
+     */
+    static void mostrarCamposTabla(String nombreTabla, Connection miConexion) throws SQLException {
+        // Preparamos la consulta
+        try (Statement elStatement = miConexion.createStatement()) {
+            String sql = "SELECT * FROM " + nombreTabla;
+
+            try (ResultSet resul = elStatement.executeQuery(sql)) {
+
+                for (int i = 1; i <= resul.getMetaData().getColumnCount(); i++) {
+                    System.out.print(resul.getMetaData().getColumnName(i) + "\t");
+                }
+                System.out.println();
+
+            }
+        }
+    }
+
+    /**
+     * Usaremos la sentencia insert con parámetros, introduciendo en el sentencia SQL interrogaciones
+     * allí donde queremos que los datos sean variables. Para ello necesitamos la clase PreparedStatement
+     * después podemos utilizar setString(indiceCampo, valor) para dar valor a esos parámetros
+     * @param nombreTabla
+     * @param miConexion
+     * @throws SQLException 
+     */
+    static void insertarRegistroTabla(String nombreTabla, Connection miConexion) throws SQLException {
+        System.out.println("Introduce el nick");
+        String nick = ControlData.lerString(sc);
+        System.out.println("Introduce el nombre del contacto ");
+        String nombre = ControlData.lerString(sc);
+        System.out.println("Introduce los apellidos del contacto ");
+        String apellidos = ControlData.lerString(sc);
+        System.out.println("Introduce la dirección ");
+        String direccion = ControlData.lerString(sc);
+        System.out.println("Introduce un nº de teléfono");
+        String telefono1 = ControlData.lerString(sc);
+        System.out.println("Introduce otro nº de teléfono");
+        String telefono2 = ControlData.lerString(sc);
+
+        // Preparamos la consulta
+        PreparedStatement elPrepareStatement = miConexion.prepareStatement("INSERT INTO "+nombreTabla+" VALUES (?,?,?,?,?,?)");
+
+        elPrepareStatement.setString(1, nick);
+        elPrepareStatement.setString(2, nombre);
+        elPrepareStatement.setString(3, apellidos);
+        elPrepareStatement.setString(4, direccion);
+        elPrepareStatement.setString(5, telefono1);
+        elPrepareStatement.setString(6, telefono2);
+        /*
+        Cuando la sentencia a ejecutar no devuelve un conjunto de resultados no 
+        deberemos de usar executeQuery(), sino que deberemos de utilizar executeUpdate(). 
+        Esto es aplicable a INSERT, UPDATE y DELETE.
+         */
+        int operacionRealizada = elPrepareStatement.executeUpdate();
+        if (operacionRealizada == 1) {
+            System.out.println("Registro insertado");
+        } else {
+            System.out.println("La operación no se ha llevado a cabo");
+        }
+
     }
 
 }
