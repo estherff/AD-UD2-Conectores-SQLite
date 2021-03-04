@@ -47,7 +47,7 @@ public class ConexionSingleton {
      * una instancia de la misma.
      *
      * @param cadenaConexion La cadena de conexión de la base de datos
-     * @return una instancia de la conexión a una base de datos
+     * @return Connection una instancia de la conexión a una base de datos
      */
     public static Connection getConnection(String cadenaConexion)
             throws SQLException {
@@ -57,6 +57,15 @@ public class ConexionSingleton {
         return laConexionSingelton.laConexion;
     }
 
+    /**
+      * Devuelve una conexión de la base de datos y garantiza que solo existirá
+     * una instancia de la misma.
+     * @param cadenaConexion
+     * @param usuario
+     * @param pass
+     * @return Connection una instancia de la conexión a una base de datos
+     * @throws SQLException 
+     */
     public static Connection getConnection(String cadenaConexion, String usuario, String pass)
             throws SQLException {
         if (Objects.isNull(laConexionSingelton)) {
@@ -77,10 +86,18 @@ public class ConexionSingleton {
         this.laConexion = DriverManager.getConnection(cadenaConexion);
     }
 
+    /**
+     *Constructor privado que es llamado por el método público y estático de la
+     * clase para garantizar la existencia de una única instancia de la misma.
+     * @param cadenaConexion
+     * @param username
+     * @param password
+     * @throws SQLException 
+     */
     private ConexionSingleton(String cadenaConexion, String username, String password) throws SQLException {
         Properties connectionProps = new Properties();
-        connectionProps.put("user", "as");
-        connectionProps.put("password", "");
+        connectionProps.put("user", username);
+        connectionProps.put("password", password);
         //connectionProps.put("serverTimezone", "UTC");
 
         this.cadenaConexion = cadenaConexion;

@@ -85,10 +85,8 @@ public class Principal {
     static byte pintarMenu() {
         byte opcion = 0;
         boolean correcta;
-        System.out.println("\n\n*******************************************************************************************************");
-        /* Solo sale del While cuando se selecciona una opción correcta en rango y tipo*/
-        do {
-            ArrayList<String> misOpciones = new ArrayList<String>() {
+        
+         ArrayList<String> misOpciones = new ArrayList<String>() {
                 {
                     add("Mostrar las tablas de la base de datos");
                     add("Mostrar todo el contenido las tablas");
@@ -102,6 +100,10 @@ public class Principal {
             /*La clase Menu permite imprimir el menú a partir de los datos de un ArrayList<String>
             y utilizar métodos para control de rango*/
             Menu miMenu = new Menu(misOpciones);
+            
+        System.out.println("\n\n*******************************************************************************************************");
+        /* Solo sale del While cuando se selecciona una opción correcta en rango y tipo*/
+        do {        
             miMenu.printMenu();
 
             /*La clase ControlData permite hacer un control de tipo leído*/
@@ -228,6 +230,7 @@ public class Principal {
         Esto es aplicable a INSERT, UPDATE y DELETE.
          */
         int operacionRealizada = elPrepareStatement.executeUpdate();
+        
         if (operacionRealizada == 1) {
             System.out.println("Registro insertado");
         } else {
