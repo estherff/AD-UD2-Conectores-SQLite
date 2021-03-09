@@ -1,22 +1,25 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS for A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 package gal.teis.db.operaciones;
 
 import gal.teis.excepciones.OperacionBaseDatosException;
-import gal.teis.libreriadam.ControlData;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.List;
-import java.util.Scanner;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.swing.text.DefaultStyledDocument;
 
 /**
  *
@@ -24,21 +27,21 @@ import javax.swing.text.DefaultStyledDocument;
  */
 public class OperacionesBD {
 
-    static Scanner sc = new Scanner(System.in);
-
     /**
      * ****************** CREAR BASE DE DATOS********************************
      */
     /**
      * Crea las tablas de la base de datos
      *
-     * @param sentencia Statement
-     * @throws gal.teis.excepciones.OperacionBaseDatosException
+     * @param laConexion Objeto Connection, conexión de la base de datos
+     * @throws OperacionBaseDatosException
      */
-    public static void crearBD(Statement sentencia) throws OperacionBaseDatosException {
+    public static void crearBD(Connection laConexion) throws OperacionBaseDatosException {
 
         try {
-            sentencia.execute("CREATE TABLE LIBROS "
+            Statement elStatement = laConexion.createStatement();
+
+            elStatement.execute("CREATE TABLE LIBROS "
                     + "(IDLIBRO INT NOT NULL PRIMARY KEY AUTO_INCREMENT,"
                     + " TITULO  VARCHAR(50) NOT NULL,"
                     + " AUTOR  VARCHAR(50) NOT NULL,"
@@ -54,9 +57,18 @@ public class OperacionesBD {
 
     }
 
+    /*
+     * ****************** ALTAS EN LA BASE DE DATOS**************************
+     */
     /**
-     * ****************** ALTAS EN LA BASE DE
-     * DATOS********************************
+     * Da de alta libros en la tabla LIBROS
+     *
+     * @param laConexion Objeto Connection, conexión de la base de datos
+     * @param titulo String, título del libro
+     * @param autor String, autor del libro
+     * @param precio double, precio del libro
+     * @return String, mensaje resultado de la operación
+     * @throws OperacionBaseDatosException
      */
     public static String altaLibros(Connection laConexion, String titulo, String autor, double precio) throws OperacionBaseDatosException {
         String mensaje = "";
@@ -80,8 +92,15 @@ public class OperacionesBD {
     }
 
     /**
-     * ****************** BAJAS EN LA BASE DE
-     * DATOS********************************
+     * ****************** BAJAS EN LA BASE DEDATO******************************
+     */
+    /**
+     * Permite dar de baja un libro conociendo el título
+     *
+     * @param laConexion Objeto Connection, conexión de la base de datos
+     * @param titulo String, título del libro
+     * @return String, mensaje resultado de la operación
+     * @throws OperacionBaseDatosException
      */
     public static String bajaLibrosPorTitulo(Connection laConexion, String titulo) throws OperacionBaseDatosException {
         String mensaje = "";
@@ -104,8 +123,15 @@ public class OperacionesBD {
     }
 
     /**
-     * ****************** CONSULTAS EN LA BASE DE
-     * DATOS********************************
+     * ****************** CONSULTAS EN LA BASE DE DATOS************************
+     */
+    /**
+     * Muestra los libros que se corresponden con un título determinado
+     *
+     * @param laConexion Objeto Connection, conexión de la base de datos
+     * @param titulo String, título del libro, campo de búsqueda
+     * @return String, mensaje con la información de los libros encontrados
+     * @throws OperacionBaseDatosException
      */
     public static String consultaLibroPorTitulo(Connection laConexion, String titulo) throws OperacionBaseDatosException {
 
@@ -141,6 +167,14 @@ public class OperacionesBD {
 
     }
 
+    /**
+     * Muestra los libros que se corresponden con un ID determinado
+     *
+     * @param laConexion Objeto Connection, conexión de la base de datos
+     * @param id in, identificador único del libro, campo de búsqueda
+     * @return String, mensaje con la información de los libros encontrados
+     * @throws OperacionBaseDatosException
+     */
     public static String consultaLibroPorId(Connection laConexion, int id) throws OperacionBaseDatosException {
 
         PreparedStatement elPrepareStatement = null;
@@ -174,8 +208,16 @@ public class OperacionesBD {
         return resultado;
 
     }
-    
-     public static String consultaLibroPorAutor(Connection laConexion, String autor) throws OperacionBaseDatosException {
+
+    /**
+     * Muestra los libros que se corresponden con un autor determinado
+     *
+     * @param laConexion Objeto Connection, conexión de la base de datos
+     * @param autor String, autor del libro, campo de búsqueda
+     * @return String, mensaje con la información de los libros encontrados
+     * @throws OperacionBaseDatosException
+     */
+    public static String consultaLibroPorAutor(Connection laConexion, String autor) throws OperacionBaseDatosException {
 
         PreparedStatement elPrepareStatement = null;
         String resultado = "";
@@ -208,7 +250,16 @@ public class OperacionesBD {
         return resultado;
 
     }
-      public static String consultaLibroPorPrecio(Connection laConexion, double precio) throws OperacionBaseDatosException {
+
+    /**
+     * Muestra los libros que se corresponden con un autor determinado
+     *
+     * @param laConexion Objeto Connection, conexión de la base de datos
+     * @param precio double, precio del libro, campo de búsqueda
+     * @return String, mensaje con la información de los libros encontrados
+     * @throws OperacionBaseDatosException
+     */
+    public static String consultaLibroPorPrecio(Connection laConexion, double precio) throws OperacionBaseDatosException {
 
         PreparedStatement elPrepareStatement = null;
         String resultado = "";
@@ -241,9 +292,14 @@ public class OperacionesBD {
         return resultado;
 
     }
-      
-      
 
+    /**
+     * Muestra todos los libros de la tabla LIBROS
+     *
+     * @param laConexion Objeto Connection, conexión de la base de datos
+     * @return String, mensaje con la información de los libros encontrados
+     * @throws OperacionBaseDatosException
+     */
     public static String consultaTodoLosLibros(Connection miConexion) throws OperacionBaseDatosException {
         String resultado = "";
         // Preparamos la consulta
