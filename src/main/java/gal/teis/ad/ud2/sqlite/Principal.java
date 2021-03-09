@@ -42,28 +42,28 @@ public class Principal {
                         System.out.println("\n************************************************************\n"
                                 + "LAS TABLAS DE LA BASE DE DATOS ABIERTA SON: ");
                         verTablas(laConexion);
-
                         break;
 
-                    case 2:
+                    case 2://Ver contenido de una tabla
                         System.out.println("Introduce el nombre de la tabla de la que ver su contenido");
                         nombreTabla = ControlData.lerString(sc);
                         verContenidoTabla(nombreTabla, laConexion);
-
                         break;
-                    case 3:
+                    case 3://Ver campos de la tabla
                         System.out.println("Introduce el nombre de la tabla de la que quieres ver sus campos");
                         nombreTabla = ControlData.lerString(sc);
                         System.out.println("Los campos de la tabla son");
                         mostrarCamposTabla(nombreTabla, laConexion);
                         break;
-                    case 4:
-                        System.out.println("Introduce el nombre de la tabla en la que quieres insertar un registro");
-                        nombreTabla = ControlData.lerString(sc);
-
-                        insertarRegistroTabla(nombreTabla, laConexion);
+                    case 4://Buscar un contacto por nombre
+                        System.out.println("Introduce el NICK del contacto para ver la información");
+                        String nombreContacto = ControlData.lerString(sc);
+                        buscarRegistroTabla(laConexion, nombreContacto);
                         break;
-                    case 9:
+                    case 5://Inserta un registro
+                        insertarRegistroTabla(laConexion);
+                        break;
+                    case 6:
                         System.out.println("Hasta luego!!!");
                         finalizar = true;
                 }
@@ -85,25 +85,25 @@ public class Principal {
     static byte pintarMenu() {
         byte opcion = 0;
         boolean correcta;
-        
-         ArrayList<String> misOpciones = new ArrayList<String>() {
-                {
-                    add("Mostrar las tablas de la base de datos");
-                    add("Mostrar todo el contenido las tablas");
-                    add("Mostrar todos los campos de una tabla");
-                    add("Insertar nuevo registro en la tabla");
 
-                    add("Finalizar");
-                }
-            };
+        ArrayList<String> misOpciones = new ArrayList<String>() {
+            {
+                add("Mostrar TODAS LAS TABLAS de la base de datos");
+                add("Mostrar TODO EL CONTENIDO de una tabla");
+                add("Ver TODOS LOS CAMPOS de una tabla");
+                add("Buscar en la tabla CONTACTOS por NICK");
+                add("Insertar un registro en la tabla CONTACTOS");
+                add("Finalizar");
+            }
+        };
 
-            /*La clase Menu permite imprimir el menú a partir de los datos de un ArrayList<String>
+        /*La clase Menu permite imprimir el menú a partir de los datos de un ArrayList<String>
             y utilizar métodos para control de rango*/
-            Menu miMenu = new Menu(misOpciones);
-            
+        Menu miMenu = new Menu(misOpciones);
+
         System.out.println("\n\n*******************************************************************************************************");
         /* Solo sale del While cuando se selecciona una opción correcta en rango y tipo*/
-        do {        
+        do {
             miMenu.printMenu();
 
             /*La clase ControlData permite hacer un control de tipo leído*/
@@ -192,16 +192,39 @@ public class Principal {
             }
         }
     }
-
+    
+    
     /**
-     * Usaremos la sentencia insert con parámetros, introduciendo en el sentencia SQL interrogaciones
-     * allí donde queremos que los datos sean variables. Para ello necesitamos la clase PreparedStatement
-     * después podemos utilizar setString(indiceCampo, valor) para dar valor a esos parámetros
-     * @param nombreTabla
+     * Bucar registros en la tabla contacto con un NICK. Utilizamos parámetros en sentencia SQL 
      * @param miConexion
+     * @param nick
      * @throws SQLException 
      */
-    static void insertarRegistroTabla(String nombreTabla, Connection miConexion) throws SQLException {
+    static void buscarRegistroTabla(Connection miConexion, String nick) throws SQLException{
+            // Preparamos la consulta
+            PreparedStatement elPrepareStatement = miConexion.prepareStatement("SELECT * FROM CONTACTOS WHERE NICK = ?");
+            elPrepareStatement.setString(1, nick);
+            ResultSet resul = elPrepareStatement.executeQuery();
+            while (resul.next()) {
+                    for (int i = 1; i <= resul.getMetaData().getColumnCount(); i++) {
+                        System.out.printf("%s ", resul.getString(i));
+                    }
+                    System.out.println();
+                }
+    }
+
+    /**
+     * Usaremos la sentencia insert con parámetros, introduciendo en el
+     * sentencia SQL interrogaciones allí donde queremos que los datos sean
+     * variables. Para ello necesitamos la clase PreparedStatement después
+     * podemos utilizar setString(indiceCampo, valor) para dar valor a esos
+     * parámetros
+     *
+     * @param nombreTabla
+     * @param miConexion
+     * @throws SQLException
+     */
+    static void insertarRegistroTabla(Connection miConexion) throws SQLException {   
         System.out.println("Introduce el nick");
         String nick = ControlData.lerString(sc);
         System.out.println("Introduce el nombre del contacto ");
@@ -215,28 +238,27 @@ public class Principal {
         System.out.println("Introduce otro nº de teléfono");
         String telefono2 = ControlData.lerString(sc);
 
-        // Preparamos la consulta
-        PreparedStatement elPrepareStatement = miConexion.prepareStatement("INSERT INTO "+nombreTabla+" VALUES (?,?,?,?,?,?)");
+            // Preparamos la consulta
+            PreparedStatement elPrepareStatement = miConexion.prepareStatement("INSERT INTO CONTACTOS VALUES (?,?,?,?,?,?)");
 
-        elPrepareStatement.setString(1, nick);
-        elPrepareStatement.setString(2, nombre);
-        elPrepareStatement.setString(3, apellidos);
-        elPrepareStatement.setString(4, direccion);
-        elPrepareStatement.setString(5, telefono1);
-        elPrepareStatement.setString(6, telefono2);
-        /*
+            elPrepareStatement.setString(1, nick);
+            elPrepareStatement.setString(2, nombre);
+            elPrepareStatement.setString(3, apellidos);
+            elPrepareStatement.setString(4, direccion);
+            elPrepareStatement.setString(5, telefono1);
+            elPrepareStatement.setString(6, telefono2);
+            /*
         Cuando la sentencia a ejecutar no devuelve un conjunto de resultados no 
         deberemos de usar executeQuery(), sino que deberemos de utilizar executeUpdate(). 
         Esto es aplicable a INSERT, UPDATE y DELETE.
-         */
-        int operacionRealizada = elPrepareStatement.executeUpdate();
-        
-        if (operacionRealizada == 1) {
-            System.out.println("Registro insertado");
-        } else {
-            System.out.println("La operación no se ha llevado a cabo");
-        }
+             */
+            int registrosInsertados = elPrepareStatement.executeUpdate();
 
+            if (registrosInsertados == 1) {
+                System.out.println("Registro insertado");
+            } else {
+                System.out.println("La operación no se ha llevado a cabo");
+            }
     }
 
 }
