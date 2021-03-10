@@ -51,7 +51,7 @@ public class OperacionesBD {
             //En el caso de que no se pueda ejecutar, lo más probable es que sea porque ya están creadas
             //El mensaje lo tomo hasta e primer \n pues es donde indica la información útil
             String mensaje = "No se ha podido realiazar la operación\n"
-                    + ex.getMessage().substring(0, ex.getMessage().indexOf("\n"));
+                    + ex.getMessage();
             throw new OperacionBaseDatosException(mensaje);
         }
 
