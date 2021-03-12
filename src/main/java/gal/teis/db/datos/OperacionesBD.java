@@ -212,10 +212,10 @@ public class OperacionesBD {
         int count = 0;
 
         try (Connection miConexion = ConexionSingleton.getConnection(cadenaConexion, user, pass);
-                PreparedStatement elPrepareStatement = miConexion.prepareStatement("SELECT * FROM LIBROS WHERE TITULO = ?");) {
+                PreparedStatement elPrepareStatement = miConexion.prepareStatement("SELECT * FROM LIBROS WHERE TITULO LIKE ? ");) {
 
-            //Asignamos los parámetros
-            elPrepareStatement.setString(1, titulo);
+            //La búsqueda la hará para los libros cuyo título contengan el texto dado
+            elPrepareStatement.setString(1, "%"+titulo+"%");
             //ejecuta la operación de inserción
             try (ResultSet elResultSet = elPrepareStatement.executeQuery();){
 
