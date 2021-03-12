@@ -12,7 +12,7 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-package gal.teis.conexion;
+package gal.teis.db.datos;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -36,6 +36,7 @@ import java.util.Properties;
  * @author Esther Ferreiro
  */
 public class ConexionSingleton {
+    
 
     private final String cadenaConexion;
     private final Connection laConexion;
@@ -51,7 +52,7 @@ public class ConexionSingleton {
      */
     public static Connection getConnection(String cadenaConexion)
             throws SQLException {
-        if (Objects.isNull(laConexionSingelton)) {
+        if (Objects.isNull(laConexionSingelton) || laConexionSingelton.laConexion.isClosed()) {
             laConexionSingelton = new ConexionSingleton(cadenaConexion);
         }
         return laConexionSingelton.laConexion;
@@ -59,7 +60,7 @@ public class ConexionSingleton {
 
     public static Connection getConnection(String cadenaConexion, String usuario, String pass)
             throws SQLException {
-        if (Objects.isNull(laConexionSingelton)) {
+        if (Objects.isNull(laConexionSingelton) || laConexionSingelton.laConexion.isClosed()) {
             laConexionSingelton = new ConexionSingleton(cadenaConexion,usuario,pass);
         }
         return laConexionSingelton.laConexion;
