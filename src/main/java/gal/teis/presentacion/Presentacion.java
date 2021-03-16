@@ -30,6 +30,7 @@ public class Presentacion {
     public static void mostrarMensaje(String mensaje) {
         System.out.println(mensaje);
     }
+    
     public static void mostrarError(String mensaje) {
         System.out.println(mensaje);
     }
@@ -189,4 +190,8 @@ public static String otraOperacionSN (){
 
         return opcion;
     }
+   
+   public static void cerrarScanner(){
+       sc.close();
+   }
 }
