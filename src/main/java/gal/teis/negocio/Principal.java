@@ -177,7 +177,7 @@ public class Principal {
                     break;
                 case 5:
                     Presentacion.mostrarMensaje("Hasta luego!!!");
-                    Presentacion.cerrarScanner();
+                    Presentacion.cerrarelScanner();
                     finalizar = true;
             }
         } while (!finalizar);

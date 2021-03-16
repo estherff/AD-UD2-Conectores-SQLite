@@ -191,7 +191,7 @@ public static String otraOperacionSN (){
         return opcion;
     }
    
-   public static void cerrarScanner(){
+   public static void cerrarelScanner(){
        sc.close();
    }
 }
