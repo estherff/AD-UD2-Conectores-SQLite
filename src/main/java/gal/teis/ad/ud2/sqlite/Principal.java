@@ -38,7 +38,6 @@ public class Principal {
             do {
                 switch (pintarMenu()) {
                     case 1:
-
                         System.out.println("\n************************************************************\n"
                                 + "LAS TABLAS DE LA BASE DE DATOS ABIERTA SON: ");
                         verTablas(laConexion);
@@ -66,6 +65,7 @@ public class Principal {
                     case 6:
                         System.out.println("Hasta luego!!!");
                         finalizar = true;
+                        sc.close();
                 }
             } while (!finalizar);
 

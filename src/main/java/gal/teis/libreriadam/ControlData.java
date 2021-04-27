@@ -14,16 +14,14 @@
  */
 package gal.teis.libreriadam;
 
+import gal.teis.excepciones.*;
 import java.util.Scanner;
 
 /**
- * @author Amalia Falcon
- * Conten distintos métodos estáticos que validan o tipo de datos que se lee 
- * mediante Scanner
+ * @author Amalia Falcon Conten distintos métodos estáticos que validan o tipo
+ * de datos que se lee mediante Scanner
  */
 public class ControlData {
-
-    
 
     /**
      * Controla a introdución correcta dunha variable tipo byte utilizando unha
@@ -51,11 +49,34 @@ public class ControlData {
     }
 
     /**
+     * Controla que unha cadea poida convertirse en byte e se non ocorre lánzase
+     * unha instrucción propia
+     *
+     * @param cadea Tipo String - cadea orixinal que debe poder transformarse en
+     * byte
+     * @return Tipo byte, resultado de converter a cadea nun valor de tipo byte
+     * @throws gal.teis.excepciones.TipoNotByteException
+     */
+    public static byte lerByte(String cadea) throws TipoNotByteException {
+        byte valor = 0;
+
+        try {
+
+            valor = Byte.valueOf(cadea);
+
+        } catch (NumberFormatException e) {
+
+            throw new TipoNotByteException();
+        }
+        return valor;
+    }
+
+    /**
      * Controla a introdución correcta dunha variable tipo byte utilizando unha
      * variable Scanner que se pasa por parámetro
      *
      * @param sc Tipo Scanner
-     * @return valor Tipo short - valor de tipo short introducido por teclado
+     * @return valor Tipo short, valor de tipo short introducido por teclado
      */
     public static short lerShort(Scanner sc) {
         short valor = 0;
@@ -72,6 +93,30 @@ public class ControlData {
             sc.nextLine();
         } while (repetir);
 
+        return valor;
+    }
+
+    /**
+     * Controla que unha cadea poida convertirse en short e se non ocorre
+     * lánzase unha instrucción propia
+     *
+     * @param cadea Tipo String - cadea orixinal que debe poder transformarse en
+     * short
+     * @return valor Tipo short resultado de converter a cadea en un valor de
+     * tipo short
+     * @throws gal.teis.excepciones.TipoNotShortException
+     */
+    public static short lerShort(String cadea) throws TipoNotShortException {
+        short valor = 0;
+
+        try {
+
+            valor = Short.valueOf(cadea);
+
+        } catch (NumberFormatException e) {
+
+            throw new TipoNotShortException();
+        }
         return valor;
     }
 
@@ -101,6 +146,30 @@ public class ControlData {
     }
 
     /**
+     * Controla que unha cadea poida convertirse en long e se non ocorre lánzase
+     * unha instrucción propia
+     *
+     * @param cadea Tipo String - cadea orixinal que debe poder transformarse en
+     * long
+     * @return valor Tipo long resultado de converter a cadea en un valor de
+     * tipo long
+     * @throws gal.teis.excepciones.TipoNotIntException
+     */
+    public static int lerInt(String cadea) throws TipoNotIntException {
+        int valor = 0;
+
+        try {
+
+            valor = Integer.valueOf(cadea);
+
+        } catch (NumberFormatException e) {
+
+            throw new TipoNotIntException();
+        }
+        return valor;
+    }
+
+    /**
      * Controla a introdución correcta dunha variable tipo byte utilizando unha
      * variable Scanner que se pasa por parámetro
      *
@@ -122,6 +191,30 @@ public class ControlData {
             sc.nextLine();
         } while (repetir);
 
+        return valor;
+    }
+
+    /**
+     * Controla que unha cadea poida convertirse en long e se non ocorre lánzase
+     * unha instrucción propia
+     *
+     * @param cadea Tipo String - cadea orixinal que debe poder transformarse en
+     * long
+     * @return valor Tipo long resultado de converter a cadea en un valor de
+     * tipo long
+     * @throws gal.teis.excepciones.TipoNotLongException
+     */
+    public static long lerLong(String cadea) throws TipoNotLongException {
+        long valor = 0;
+
+        try {
+
+            valor = Long.valueOf(cadea);
+
+        } catch (NumberFormatException e) {
+
+            throw new TipoNotLongException();
+        }
         return valor;
     }
 
@@ -151,6 +244,30 @@ public class ControlData {
     }
 
     /**
+     * Controla que unha cadea poida convertirse en float e se non ocorre
+     * lánzase unha instrucción propia
+     *
+     * @param cadea Tipo String - cadea orixinal que debe poder transformarse en
+     * float
+     * @return valor Tipo float resultado de converter a cadea en un valor de
+     * tipo float
+     * @throws gal.teis.excepciones.TipoNotFloatException
+     */
+    public static float lerFloat(String cadea) throws TipoNotFloatException {
+        float valor = 0;
+
+        try {
+
+            valor = Float.valueOf(cadea);
+
+        } catch (NumberFormatException e) {
+
+            throw new TipoNotFloatException();
+        }
+        return valor;
+    }
+
+    /**
      * Controla a introdución correcta dunha variable tipo byte utilizando unha
      * variable Scanner que se pasa por parámetro
      *
@@ -172,6 +289,30 @@ public class ControlData {
             sc.nextLine();
         } while (repetir);
 
+        return valor;
+    }
+
+    /**
+     * Controla que unha cadea poida convertirse en double e se non ocorre
+     * lánzase unha instrucción propia
+     *
+     * @param cadea Tipo String - cadea orixinal que debe poder transformarse en
+     * double
+     * @return valor Tipo double resultado de converter a cadea en un valor de
+     * tipo double
+     * @throws gal.teis.excepciones.TipoNotDoubleException
+     */
+    public static double lerDouble(String cadea) throws TipoNotDoubleException {
+        double valor = 0;
+
+        try {
+
+            valor = Double.valueOf(cadea);
+
+        } catch (NumberFormatException e) {
+
+            throw new TipoNotDoubleException();
+        }
         return valor;
     }
 
@@ -201,6 +342,30 @@ public class ControlData {
     }
 
     /**
+     * Controla que unha cadea poida convertirse en boolean e se non ocorre
+     * lánzase unha instrucción propia
+     *
+     * @param cadea Tipo String - cadea orixinal que debe poder transformarse en
+     * boolean
+     * @return valor Tipo boolean resultado de converter a cadea en un valor de
+     * tipo boolean
+     * @throws gal.teis.excepciones.TipoNotBooleanException
+     */
+    public static boolean lerBoolean(String cadea) throws TipoNotBooleanException {
+        boolean valor = false;
+
+        try {
+
+            valor = Boolean.valueOf(cadea);
+
+        } catch (NumberFormatException e) {
+
+            throw new TipoNotBooleanException();
+        }
+        return valor;
+    }
+
+    /**
      * Controla a introdución correcta dunha variable tipo byte utilizando unha
      * variable Scanner que se pasa por parámetro
      *
@@ -218,6 +383,21 @@ public class ControlData {
     }
 
     /**
+     * Controla que un String non estea valeiro e se o está lanza unha excepción
+     * propia
+     *
+     * @param cadea String a controlar
+     * @throws gal.teis.excepciones.TipoNotStringException
+     */
+    public static void lerString(String cadea) throws TipoNotStringException {
+
+        if (cadea.isEmpty()) {
+            throw new TipoNotStringException();
+        }
+
+    }
+
+    /**
      * Controla a introdución correcta dunha variable tipo byte utilizando unha
      * variable Scanner que se pasa por parámetro
      *
@@ -229,9 +409,26 @@ public class ControlData {
 
         do {
             resultado = sc.nextLine();
+
         } while (resultado.isEmpty());
 
         return resultado.charAt(0);
+    }
+
+    /**
+     * Controla que un String sexa un caracter e se non o é lanza unha excepción
+     * propia
+     *
+     * @param cadea caracter primero da cadea
+     * @return char o caracter equivalente a cadea
+     * @throws gal.teis.excepciones.TipoNotCharException
+     */
+    public static char lerChar(String cadea) throws TipoNotCharException {
+
+        if (cadea.isEmpty()) {
+            throw new TipoNotCharException();
+        }
+        return cadea.charAt(0);
     }
 
     /**
@@ -273,5 +470,18 @@ public class ControlData {
         } while (repetir);
 
         return nome;
+    }
+
+    /**
+     * Controla que unha cadea conteña só letras
+     *
+     * @param cadea String a controlar
+     * @throws gal.teis.excepciones.TipoNotNomeException
+     */
+    public static void lerNome(String cadea) throws TipoNotNomeException {
+
+        if (!(cadea.isEmpty() || !cadea.toUpperCase().matches("[A-ZÁÉÍÓÚÜÑ\\-\\s]*"))) {
+            throw new TipoNotNomeException();
+        }
     }
 }
