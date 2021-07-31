@@ -1,4 +1,4 @@
-package gal.teis.ad.ud2.sqlite;
+package gal.teis.app;
 
 import gal.teis.conexion.ConexionSingleton;
 import gal.teis.excepciones.NumeroFueraRangoException;
